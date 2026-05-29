@@ -1,5 +1,13 @@
 # VibeTree
 
+A customizable directory tree generator for Markdown READMEs—a simple, Python-based alternative to the standard `tree` command.
+
+**Features:**
+- **Hide noise:** Completely exclude directories like `__pycache__` or `.venv`.
+- **Filter files:** Cleanly filter out any extensions you don't want to see.
+  
+---
+
 **Windowsの標準`tree`コマンドは愛しているけれど、表示したくないディレクトリ（フォルダ）の扱いが面倒、ということで、バイブスと衝動だけで作成した高機能ディレクトリ（フォルダ）ツリー生成スクリプト。**
 
 「不要なディレクトリを弾きつつ、右側にいい感じのコメントを添えてREADME用のツリーを作りたい、もうディレクトリをよけて、戻さないで起こす事故いや！」
