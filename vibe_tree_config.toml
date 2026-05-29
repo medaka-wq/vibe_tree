@@ -1,0 +1,57 @@
+# vibe_tree_config.toml
+
+[settings]
+# 【完全非表示】 存在すらツリーから消し去りたいフォルダ・ファイル
+# 「念のためバックアップ」を緊急避難させました
+hide_dirs = [
+    "__pycache__", 
+    "退避", 
+    "念のためバックアップ", 
+    ".git", 
+    ".vscode", 
+    ".idea", 
+    ".pytest_cache", 
+    "build", 
+    "dist"
+]
+
+# 【下層隠し】 フォルダ名は出すけど、中身は非表示にしたいフォルダ
+exclude_dirs = [
+    "venv", 
+    ".venv", 
+    "node_modules", 
+    "docs", 
+    "assets"
+]
+
+# 【拡張子除外】 画面を汚す不要なファイルや、つい作ってしまう「.old」
+exclude_exts = [
+    ".pyc", 
+    ".pyd", 
+    ".pyo", 
+    ".DS_Store", 
+    "Thumbs.db", 
+    ".log",
+    ".old"
+]
+
+[comments]
+# --- このツール関連 ---
+"vibe_tree.py" = "<- ツリー構造生成スクリプト"
+"vibe_tree_config.toml" = "<- この設定ファイル"
+"README.md" = "<- あなたがいま読んでいるドキュメント"
+
+# --- Python・環境構築関連 ---
+"main.py" = "<- メインの実行ファイル"
+"requirements.txt" = "<- 依存ライブラリ（pip）一覧"
+"venv" = "<- Python仮想環境（作成済み）"
+".venv" = "<- Python仮想環境（作成済み）"
+
+# --- その他共通・定番ファイル ---
+".gitignore" = "<- Git管理から除外するファイルの設定"
+"LICENSE" = "<- ライセンス（利用規約）表記ファイル"
+
+# --- 自分用 ---
+"よく使うプロンプト.txt" = "<- AIへの指示出し用"
+"memo.txt" = "<- 殴り書き用の一時ファイル"
+"todo.txt" = "<- 直近でやりたいことメモ"
