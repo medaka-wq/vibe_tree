@@ -1,6 +1,6 @@
 import os
 import sys
-import tomllib  
+import tomllib
 
 def load_config():
     config_path = "vibe_tree_config.toml"
@@ -8,49 +8,54 @@ def load_config():
         "hide_dirs": {"__pycache__", ".git"},
         "exclude_dirs": {"venv", ".venv"},
         "exclude_exts": {".pyc"},
+        "max_depth": 5,  # デフォルト値を設定
         "comments": {}
     }
-    
     if os.path.exists(config_path):
         with open(config_path, "rb") as f:
             data = tomllib.load(f)
-            return {
-                "hide_dirs": set(data.get("settings", {}).get("hide_dirs", [])),
-                "exclude_dirs": set(data.get("settings", {}).get("exclude_dirs", [])),
-                "exclude_exts": set(data.get("settings", {}).get("exclude_exts", [])),
-                "comments": data.get("comments", {})
-            }
+        settings = data.get("settings", {})
+        return {
+            "hide_dirs": set(settings.get("hide_dirs", [])),
+            "exclude_dirs": set(settings.get("exclude_dirs", [])),
+            "exclude_exts": set(settings.get("exclude_exts", [])),
+            "max_depth": settings.get("max_depth", 5),  # TOMLから読み込み（なければ5）
+            "comments": data.get("comments", {})
+        }
     return default_config
 
 CONFIG = load_config()
 
-def draw_tree(path, indent="", is_last=True, is_root=True):
+def draw_tree(path, indent="", is_last=True, is_root=True, depth=0):
     path = os.path.abspath(path)
     name = os.path.basename(path)
-    is_dir = os.path.isdir(path)
+    
+    # 設定ファイルから読み込んだ上限値（max_depth）と比較
+    if depth > CONFIG["max_depth"]:
+        print(f"{indent}└── ... (Depth limit reached)")
+        return
 
+    is_dir = os.path.isdir(path)
     # フォルダ名なら後ろにスラッシュを追加
     display_name = f"{name}/" if is_dir else name
-
+    
     if is_root:
         print(display_name)
-        draw_children(path, indent)
+        draw_children(path, indent, depth)
     else:
         branch = "└── " if is_last else "├── "
-        
         comment = CONFIG["comments"].get(name, "")
         if comment:
             comment = f"  {comment}"
-
         print(f"{indent}{branch}{display_name}{comment}")
         
         # 【下層隠しの判定】
         # フォルダであり、かつ exclude_dirs に入っていない場合だけさらに下に潜る
         if is_dir and (name not in CONFIG["exclude_dirs"]):
             next_indent = indent + ("    " if is_last else "│   ")
-            draw_children(path, next_indent)
+            draw_children(path, next_indent, depth)
 
-def draw_children(path, indent):
+def draw_children(path, indent, depth):
     try:
         items = os.listdir(path)
     except PermissionError:
@@ -61,11 +66,10 @@ def draw_children(path, indent):
         full_path = os.path.join(path, item)
         _, ext = os.path.splitext(item)
         
-        # 🔥【完全非表示の判定】
+        # 【完全非表示の判定】
         # フォルダであり、かつ hide_dirs に含まれている場合はツリーの候補にすら入れない
         if os.path.isdir(full_path) and item in CONFIG["hide_dirs"]:
             continue
-            
         # 拡張子の除外チェック
         if os.path.isfile(full_path) and ext in CONFIG["exclude_exts"]:
             continue
@@ -78,7 +82,8 @@ def draw_children(path, indent):
     count = len(filtered_items)
     for i, item in enumerate(filtered_items):
         full_path = os.path.join(path, item)
-        draw_tree(full_path, indent, is_last=(i == count - 1), is_root=False)
+        # 次の階層へ depth + 1 を渡す
+        draw_tree(full_path, indent, is_last=(i == count - 1), is_root=False, depth=depth + 1)
 
 if __name__ == "__main__":
     target_dir = sys.argv[1] if len(sys.argv) > 1 else "."

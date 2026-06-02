@@ -5,6 +5,7 @@ A customizable directory tree generator for Markdown READMEs—a simple, Python-
 **Features:**
 - **Hide noise:** Completely exclude directories like `__pycache__` or `.venv`.
 - **Filter files:** Cleanly filter out any extensions you don't want to see.
+- **Safe depth:** Automatically limits the scan to 5 levels deep to prevent output overload.
   
 ---
 
@@ -19,8 +20,10 @@ Windowsの標準`tree`コマンドの出力をカスタマイズし、特定の�
 
 ドキュメント（README等）にプロジェクトのディレクトリ構造を美しく掲載したい場合に最適です。
 
-## 主な機能
+## 💡 主な機能
 
+- **最大5階層までの安全制限（NEW）**
+  予期せぬ大量のファイル出力による画面フリーズや事故を防ぐため、探索する深さを最大5階層までに制限（設定で変更可能）しています。
 - **フォルダの完全非表示（hide_dirs）**
   `__pycache__` や `退避` フォルダなど、ツリー上に存在自体を表示させたくないフォルダを完全に除外します。
 - **下層ディレクトリの非表示（exclude_dirs）**
