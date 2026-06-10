@@ -1,5 +1,4 @@
 import os
-import sys
 import argparse
 import fnmatch
 import unicodedata  # 日本語の表示幅を正しく計算するために追加
@@ -43,6 +42,9 @@ def load_config():
             with open(config_path, "rb") as f:
                 data = tomllib.load(f)
             settings = data.get("settings", {})
+            # 【追加】設定値の検証
+            if settings.get("default_depth", 0) > settings.get("max_depth_limit", 0):
+                print(f"[Warning] default_depth is greater than max_depth_limit in {config_path}")
             return {
                 "hide_dirs": set(settings.get("hide_dirs", default_config["hide_dirs"])),
                 "exclude_dirs": set(settings.get("exclude_dirs", default_config["exclude_dirs"])),
@@ -54,7 +56,7 @@ def load_config():
         except Exception as e:
             print(f"[Warning] Failed to load config ({config_path}): {e}")
             print("Falling back to default settings.\n")
-            
+
     return default_config
 
 CONFIG = load_config()
@@ -73,79 +75,80 @@ def get_display_width(text):
             width += 1
     return width
 
-def build_tree_data(path, target_depth, show_files, show_comments, indent="", is_last=True, is_root=True, depth=1, tree_lines=None):
+def is_ignored(item, full_path):
     """
-    ツリーの構造を解析し、各行の「ツリーテキスト」と「コメント」をリストに溜め込む（出力はしない）
+    除外判定ロジック
     """
-    if tree_lines is None:
-        tree_lines = []
-
-    path = os.path.abspath(path)
-    name = os.path.basename(path)
+    if os.path.isdir(full_path) and item in CONFIG["hide_dirs"]:
+        return True
     
-    if depth > target_depth:
-        return tree_lines
+    if os.path.isfile(full_path):
+        for pat in CONFIG["exclude_exts"]:
+            pattern = pat if pat.startswith("*") else "*" + pat
+            if fnmatch.fnmatch(item, pattern):
+                return True
+    return False
 
-    is_dir = os.path.isdir(path)
-    display_name = f"{name}/" if is_dir else name
-    
-    if is_root:
-        # ルートディレクトリ（一番上）はコメントなしで登録
-        tree_lines.append({"tree_part": display_name, "comment": ""})
-        build_children_data(path, target_depth, show_files, show_comments, indent, depth, tree_lines)
-    else:
-        branch = "└── " if is_last else "├── "
-        tree_part = f"{indent}{branch}{display_name}"
+def build_tree_data(root_path, target_depth, show_files, show_comments):
+    """
+    ツリーの構造を解析し、リストを返す
+    """
+    tree_lines = []
+
+    def _build(path, indent="", is_last=True, is_root=True, depth=1):
+        # 階層制限チェック
+        if depth > target_depth:
+            return
+
+        name = os.path.basename(path)
+        is_dir = os.path.isdir(path)
+        display_name = f"{name}/" if is_dir else name
         
-        # コマンド表示機能（オプションが有効な場合のみコメントを抽出）
-        comment = ""
-        if show_comments:
-            raw_comment = CONFIG["comments"].get(name, "")
-            if raw_comment:
-                comment = raw_comment
-                
-        tree_lines.append({"tree_part": tree_part, "comment": comment})
-        
-        # フォルダであり、かつ除外対象（下層隠し）でなければ進む
-        if is_dir and (name not in CONFIG["exclude_dirs"]):
-            next_indent = indent + ("    " if is_last else "│   ")
-            build_children_data(path, target_depth, show_files, show_comments, next_indent, depth, tree_lines)
-
-    return tree_lines
-
-def build_children_data(path, target_depth, show_files, show_comments, indent, depth, tree_lines):
-    try:
-        items = os.listdir(path)
-    except PermissionError:
-        return
-
-    filtered_items = []
-    for item in items:
-        full_path = os.path.join(path, item)
-        _, ext = os.path.splitext(item)
-        
-        # 完全非表示の判定（フォルダ名チェック）
-        if os.path.isdir(full_path) and item in CONFIG["hide_dirs"]:
-            continue
-        # 拡張子の除外チェック
-        if os.path.isfile(full_path) and ext in CONFIG["exclude_exts"]:
-            continue
-        # ファイル非表示モードの場合はファイルをスキップ
-        if not show_files and os.path.isfile(full_path):
-            continue
+        # 1. 現在の行を記録
+        if is_root:
+            tree_lines.append({"tree_part": display_name, "comment": ""})
+        else:
+            branch = "└── " if is_last else "├── "
+            tree_part = f"{indent}{branch}{display_name}"
             
-        filtered_items.append(item)
+            comment = ""
+            if show_comments:
+                comment = CONFIG["comments"].get(name, "")
+            
+            tree_lines.append({"tree_part": tree_part, "comment": comment})
 
-    # フォルダを上、ファイルを下にソート
-    filtered_items.sort(key=lambda x: (not os.path.isdir(os.path.join(path, x)), x.lower()))
+        # 2. フォルダなら中身を探索
+        if is_dir and (name not in CONFIG["exclude_dirs"] or is_root):
+            try:
+                items = os.listdir(path)
+            except PermissionError:
+                return
 
-    count = len(filtered_items)
-    for i, item in enumerate(filtered_items):
-        full_path = os.path.join(path, item)
-        build_tree_data(
-            full_path, target_depth, show_files, show_comments,
-            indent, is_last=(i == count - 1), is_root=False, depth=depth + 1, tree_lines=tree_lines
-        )
+            # 除外判定などのフィルタリング
+            filtered_items = []
+            for item in items:
+                full_path = os.path.join(path, item)
+                
+                # --- 1. 除外ルールに引っかかるなら無視する ---
+                if is_ignored(item, full_path):
+                    continue
+                
+                # --- 2. ファイル非表示モードなら無視する ---
+                if not show_files and os.path.isfile(full_path):
+                    continue
+                filtered_items.append(item)
+
+            # ソート
+            filtered_items.sort(key=lambda x: (not os.path.isdir(os.path.join(path, x)), x.lower()))
+
+            # 再帰呼び出し
+            next_indent = indent + ("    " if is_last else "│   ")
+            for i, item in enumerate(filtered_items):
+                _build(os.path.join(path, item), next_indent, is_last=(i == len(filtered_items) - 1), is_root=False, depth=depth + 1)
+
+    # 最初の呼び出し
+    _build(os.path.abspath(root_path))
+    return tree_lines
 
 def main():
     parser = argparse.ArgumentParser(description="vibe-tree: A smart tree command with depth control and comments.")
@@ -186,7 +189,6 @@ def main():
             if line["comment"]:
                 current_width = get_display_width(line["tree_part"])
                 
-                # Aの内容を反映
                 if current_width > effective_max_width:
                     # 制限を超えたら、揃えずに最低限の空白だけ空けてコメントを書く
                     print(f"{line['tree_part']}{' ' * PADDING_MARGIN}# {line['comment']}")
