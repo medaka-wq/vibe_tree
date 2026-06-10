@@ -1,0 +1,71 @@
+# vibe_tree_config.toml - Python & Data Science Environment Configuration (日本語版)
+
+[settings]
+# 【階層制限】 これ以上深く潜らないための最大階層数（ストッパー機能）
+max_depth_limit = 8
+
+# デフォルト階層数（主要なコードや成果物が見える最適な深さ）
+default_depth = 4
+
+# 【完全非表示】 ツリーから存在すら消し去るフォルダ・ファイル
+# Python特有のキャッシュや、Jupyterの一時保存フォルダ、各種解析ツールのゴミを完全に除外
+hide_dirs = [
+    ".git",
+    "__pycache__",
+    ".vscode",
+    ".idea",
+    "node_modules",
+    ".pytest_cache",       # pytest キャッシュ
+    ".mypy_cache",         # Mypy 型チェックキャッシュ
+    ".ruff_cache",         # Ruff 高速ロガー・フォーマッタキャッシュ
+    ".ipynb_checkpoints"   # Jupyter Notebook 一時保存フォルダ
+]
+
+# 【下層隠し】 フォルダ名は表示するが、その中身（大量のライブラリやデータ等）は展開しない
+exclude_dirs = [
+    "venv",
+    ".venv",
+    "env",
+    "ENV",
+    "site-packages",       # 外部ライブラリ群
+    "dist",                # パッケージ配布用ビルド成果物
+    "build",
+    "*.egg-info",
+    "data"                 # データ分析用の大容量データフォルダ（中身が多すぎるため隠すのが鉄則）
+]
+
+# 【拡張子除外】 画面の視認性を下げる不要なファイルや一時ファイル
+exclude_exts = [
+    ".pyc",
+    ".pyd",
+    ".pyo",
+    ".DS_Store",
+    "Thumbs.db",
+    ".log",
+    ".old"
+]
+
+[comments]
+# --- ツール・共通ドキュメント ---
+"README.md" = "プロジェクト説明書（ドキュメント）"
+".gitignore" = "Git管理対象外設定ファイル"
+"LICENSE" = "ライセンス（利用規約）表記ファイル"
+
+# --- Python環境・設定・ビルド ---
+"main.py" = "メインの実行スクリプト"
+"app.py" = "アプリケーション起動ファイル（StreamlitやFlask等）"
+"requirements.txt" = "依存ライブラリ（pip）一覧"
+"pyproject.toml" = "Pythonプロジェクト総合設定ファイル（Poetry/Ruff等）"
+"setup.py" = "パッケージ公開・配信用スクリプト"
+"Pipfile" = "Pipenv 依存関係管理ファイル"
+"poetry.lock" = "Poetry 依存関係ロックファイル"
+
+# --- データ分析・AI関連 ---
+"dataset" = "データセット格納フォルダ"
+"notebooks" = "Jupyter Notebook 作業用フォルダ"
+"models" = "学習済みモデル・重みファイル格納フォルダ"
+".env" = "環境変数定義ファイル（APIキーの管理等）"
+
+# --- 主要ディレクトリ（標準記述） ---
+"src" = "メインソースコードディレクトリ"
+"tests" = "ユニットテストコードディレクトリ"

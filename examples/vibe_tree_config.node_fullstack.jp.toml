@@ -1,0 +1,100 @@
+# vibe_tree_config.toml - Node.js Full-Stack Environment Configuration
+
+[settings]
+# 【階層制限】 これ以上深く潜らないための最大階層数（ストッパー機能）
+max_depth_limit = 8
+
+# デフォルト階層数（主要なコードや成果物が見える最適な深さ）
+default_depth = 4
+
+# 【完全非表示】 ツリーから存在自体を消し去るフォルダ・ファイル
+# 開発に不要な各種キャッシュや、膨大なパッケージマネージャーの管理フォルダ
+hide_dirs = [
+    ".git",
+    "node_modules",
+    "__pycache__",
+    ".vscode",
+    ".idea",
+    ".pnpm-store",
+    ".yarn",
+    ".next",
+    ".nuxt",
+    ".docusaurus",
+    ".turbo",
+    ".eslintcache",
+    "coverage",
+    ".nodemon",
+    ".strapi",
+    ".serverless"
+]
+
+# 【下層隠し】 フォルダ名は表示するが、その中身（自動生成ファイル等）は展開しない
+exclude_dirs = [
+    "venv",
+    ".venv",
+    "assets",
+    "public",
+    "static",
+    "dist",
+    "build",
+    "out",
+    ".output",
+    "prisma/migrations"
+]
+
+# 【拡張子除外】 画面の視認性を下げる不要なファイルや一時ファイル
+exclude_exts = [
+    ".pyc",
+    ".pyd",
+    ".pyo",
+    ".DS_Store",
+    "Thumbs.db",
+    ".log",
+    ".old",
+    ".map",
+    "npm-debug.log",
+    "yarn-error.log",
+    "lock.json"
+]
+
+[comments]
+# --- ツール・共通ドキュメント ---
+"README.md" = "プロジェクト説明書（ドキュメント）"
+".gitignore" = "Git管理対象外設定ファイル"
+"LICENSE" = "ライセンス（利用規約）表記ファイル"
+
+# --- パッケージ・依存関係管理 ---
+"package.json" = "プロジェクト設定・依存ライブラリ・スクリプト定義"
+"package-lock.json" = "npm 依存関係ロックファイル"
+"yarn.lock" = "Yarn 依存関係ロックファイル"
+"pnpm-lock.yaml" = "pnpm 依存関係ロックファイル"
+
+# --- 開発・コード品質設定 ---
+"tsconfig.json" = "TypeScript コンパイル設定"
+"jsconfig.json" = "JavaScript パス補完設定"
+".eslintrc.json" = "コード静的解析（ESLint）設定"
+".eslintignore" = "ESLint 監視対象外設定"
+".prettierrc" = "コード自動整形（Prettier）設定"
+".prettierignore" = "Prettier 自動整形対象外設定"
+".env" = "環境変数定義ファイル（ローカル開発用）"
+".env.example" = "環境変数定義ファイルのテンプレート（配信用）"
+
+# --- フロントエンド設定・フレームワーク ---
+"vite.config.ts" = "Vite ビルドツール設定"
+"vite.config.js" = "Vite ビルドツール設定"
+"next.config.js" = "Next.js 設定ファイル"
+"nuxt.config.ts" = "Nuxt.js 設定ファイル"
+"tailwind.config.js" = "Tailwind CSS デザイン設定"
+"postcss.config.js" = "PostCSS 設定"
+
+# --- バックエンド・データベース・インフラ ---
+"nodemon.json" = "バックエンドサーバー自動再起動設定"
+"server.js" = "バックエンド起動エントリーポイント（Express等）"
+"app.js" = "アプリケーションメイン定義"
+"prisma" = "データベーススキーマ・モデル管理フォルダ"
+"docker-compose.yml" = "マルチコンテナ（DB等）ローカル起動設定"
+"Dockerfile" = "コンテナイメージ作成用定義ファイル"
+
+# --- 主要ディレクトリ（標準記述） ---
+"src" = "メインソースコードディレクトリ"
+"tests" = "ユニットテストコードディレクトリ"

@@ -1,0 +1,71 @@
+# vibe_tree_config.toml - Python & Data Science Environment Configuration (English)
+
+[settings]
+# [Depth Control] Maximum depth limit to prevent infinite or excessively deep scanning
+max_depth_limit = 8
+
+# Default depth to display when no depth option is specified
+default_depth = 4
+
+# [Complete Hide] Directories and files to completely remove from the tree
+# Filters out Python compilation caches, Jupyter temporary checkpoints, and linter caches
+hide_dirs = [
+    ".git",
+    "__pycache__",
+    ".vscode",
+    ".idea",
+    "node_modules",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".ipynb_checkpoints"
+]
+
+# [Collapse Content] Display the directory name but hide its internal contents
+exclude_dirs = [
+    "venv",
+    ".venv",
+    "env",
+    "ENV",
+    "site-packages",
+    "dist",
+    "build",
+    "*.egg-info",
+    "data"
+]
+
+# [Extension Exclusion] Exclude specific file types to improve visual clarity
+exclude_exts = [
+    ".pyc",
+    ".pyd",
+    ".pyo",
+    ".DS_Store",
+    "Thumbs.db",
+    ".log",
+    ".old"
+]
+
+[comments]
+# --- Tool & Common Documents ---
+"README.md" = "Project documentation and overview"
+".gitignore" = "Git ignore configuration"
+"LICENSE" = "Project license agreement"
+
+# --- Python Environment & Build Configurations ---
+"main.py" = "Main execution script"
+"app.py" = "Application entry point (Streamlit, Flask, etc.)"
+"requirements.txt" = "List of pip dependencies"
+"pyproject.toml" = "Comprehensive Python project configuration (Poetry, Ruff, etc.)"
+"setup.py" = "Legacy package setup and distribution script"
+"Pipfile" = "Pipenv dependency management file"
+"poetry.lock" = "Lockfile for Poetry dependencies"
+
+# --- Data Science & AI Assets ---
+"dataset" = "Directory for source datasets"
+"notebooks" = "Directory for Jupyter Notebooks"
+"models" = "Directory for trained model files and weights"
+".env" = "Environment variables (API keys management)"
+
+# --- Standard Directory Names ---
+"src" = "Main source code directory"
+"tests" = "Unit and integration tests directory"

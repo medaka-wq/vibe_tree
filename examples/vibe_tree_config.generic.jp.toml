@@ -1,0 +1,52 @@
+# vibe_tree_config.toml - General & Minimalist Project Configuration (日本語版)
+
+[settings]
+# 【階層制限】 汎用的な構造のため、最大階層は少し浅めに設定
+max_depth_limit = 6
+
+# デフォルト階層数（ドキュメントやWebサイトの全体像が見えやすい深さ）
+default_depth = 3
+
+# 【完全非表示】 ツリーから存在すら消し去るフォルダ・ファイル
+# OSや一般的なエディタの管理フォルダなど、情報として完全に不要なものを除外
+hide_dirs = [
+    ".git",
+    ".vscode",
+    ".idea",
+    "__pycache__",
+    "node_modules"
+]
+
+# 【下層隠し】 フォルダ名は表示するが、その中身（大量の画像や素材等）は展開しない
+exclude_dirs = [
+    "images",
+    "img",
+    "assets",
+    "vendor",               # 外部ライブラリ・サードパーティ製品管理フォルダ
+    "backup"                # バックアップフォルダ
+]
+
+# 【拡張子除外】 画面の視認性を下げる不要なファイルや一時ファイル
+exclude_exts = [
+    ".DS_Store",
+    "Thumbs.db",
+    ".log",
+    ".old",
+    "*.bak",
+    "*.tmp"                 # アプリケーションが生成する一時ファイル
+]
+
+[comments]
+# --- ツール・共通ドキュメント ---
+"vibe_tree.py" = "ツリー構造生成スクリプト"
+"vibe_tree_config.toml" = "ツリー生成ツール設定ファイル"
+"README.md" = "プロジェクト説明書（ドキュメント）"
+".gitignore" = "Git管理対象外設定ファイル"
+"LICENSE" = "ライセンス（利用規約）表記ファイル"
+
+# --- 汎用Web・ドキュメント構造 ---
+"index.html" = "メインWebページ（エントリーポイント）"
+"style.css" = "メインスタイルシート"
+"script.js" = "メインJavaScriptファイル"
+"docs" = "関連ドキュメント格納フォルダ"
+"config.json" = "プロジェクト一般設定ファイル"

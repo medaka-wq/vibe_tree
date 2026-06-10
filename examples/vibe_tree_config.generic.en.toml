@@ -1,0 +1,52 @@
+# vibe_tree_config.toml - General & Minimalist Project Configuration (English)
+
+[settings]
+# [Depth Control] Maximum depth limit optimized for a general directory structure
+max_depth_limit = 6
+
+# Default depth to display when no depth option is specified
+default_depth = 3
+
+# [Complete Hide] Directories and files to completely remove from the tree
+# Filters out standard version control folders, editor configurations, and basic caches
+hide_dirs = [
+    ".git",
+    ".vscode",
+    ".idea",
+    "__pycache__",
+    "node_modules"
+]
+
+# [Collapse Content] Display the directory name but hide its internal contents
+exclude_dirs = [
+    "images",
+    "img",
+    "assets",
+    "vendor",
+    "backup"
+]
+
+# [Extension Exclusion] Exclude specific file types to improve visual clarity
+exclude_exts = [
+    ".DS_Store",
+    "Thumbs.db",
+    ".log",
+    ".old",
+    "*.bak",
+    "*.tmp"
+]
+
+[comments]
+# --- Tool & Common Documents ---
+"vibe_tree.py" = "Directory tree generation script"
+"vibe_tree_config.toml" = "Configuration file for vibe_tree"
+"README.md" = "Project documentation and overview"
+".gitignore" = "Git ignore configuration"
+"LICENSE" = "Project license agreement"
+
+# --- General Web & Document Structures ---
+"index.html" = "Main HTML document (Entry point)"
+"style.css" = "Main stylesheet"
+"script.js" = "Main JavaScript file"
+"docs" = "Directory for internal documentation"
+"config.json" = "General project configuration file"

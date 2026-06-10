@@ -1,0 +1,100 @@
+# vibe_tree_config.toml - Node.js Full-Stack Environment Configuration
+
+[settings]
+# [Depth Control] Maximum depth limit to prevent infinite or excessively deep scanning
+max_depth_limit = 8
+
+# Default depth to display when no depth option is specified
+default_depth = 4
+
+# [Complete Hide] Directories and files to completely remove from the tree
+# Filters out heavy package manager folders, build artifacts, and development caches
+hide_dirs = [
+    ".git",
+    "node_modules",
+    "__pycache__",
+    ".vscode",
+    ".idea",
+    ".pnpm-store",
+    ".yarn",
+    ".next",
+    ".nuxt",
+    ".docusaurus",
+    ".turbo",
+    ".eslintcache",
+    "coverage",
+    ".nodemon",
+    ".strapi",
+    ".serverless"
+]
+
+# [Collapse Content] Display the directory name but hide its internal contents
+exclude_dirs = [
+    "venv",
+    ".venv",
+    "assets",
+    "public",
+    "static",
+    "dist",
+    "build",
+    "out",
+    ".output",
+    "prisma/migrations"
+]
+
+# [Extension Exclusion] Exclude specific file types to improve visual clarity
+exclude_exts = [
+    ".pyc",
+    ".pyd",
+    ".pyo",
+    ".DS_Store",
+    "Thumbs.db",
+    ".log",
+    ".old",
+    ".map",
+    "npm-debug.log",
+    "yarn-error.log",
+    "lock.json"
+]
+
+[comments]
+# --- Tool & Common Documents ---
+"README.md" = "Project documentation and overview"
+".gitignore" = "Git ignore configuration"
+"LICENSE" = "Project license agreement"
+
+# --- Package & Dependency Management ---
+"package.json" = "Project manifest, scripts, and dependencies"
+"package-lock.json" = "Lockfile for npm dependencies"
+"yarn.lock" = "Lockfile for Yarn dependencies"
+"pnpm-lock.yaml" = "Lockfile for pnpm dependencies"
+
+# --- Development & Code Quality Configurations ---
+"tsconfig.json" = "TypeScript compiler configuration"
+"jsconfig.json" = "JavaScript path mapping and tool configuration"
+".eslintrc.json" = "ESLint linting configuration"
+".eslintignore" = "ESLint ignore settings"
+".prettierrc" = "Prettier code formatter configuration"
+".prettierignore" = "Prettier ignore settings"
+".env" = "Environment variables for local development"
+".env.example" = "Template for environment variables"
+
+# --- Frontend Configurations & Frameworks ---
+"vite.config.ts" = "Vite build tool configuration"
+"vite.config.js" = "Vite build tool configuration"
+"next.config.js" = "Next.js configuration"
+"nuxt.config.ts" = "Nuxt.js configuration"
+"tailwind.config.js" = "Tailwind CSS utility utility-first framework settings"
+"postcss.config.js" = "PostCSS tool configuration"
+
+# --- Backend, Database, & Infrastructure ---
+"nodemon.json" = "Nodemon process monitor configuration"
+"server.js" = "Backend server entry point (Express, etc.)"
+"app.js" = "Main application definition"
+"prisma" = "Prisma ORM schema and models directory"
+"docker-compose.yml" = "Docker Compose multi-container setup"
+"Dockerfile" = "Docker container image definition"
+
+# --- Standard Directory Names ---
+"src" = "Main source code directory"
+"tests" = "Unit and integration tests directory"
