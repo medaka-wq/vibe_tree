@@ -1,60 +1,54 @@
-# vibe_tree_config.toml
+# vibe_tree_config.toml - General & Minimalist Project Configuration (English)
 
 [settings]
-# 【階層制限】 これ以上深く潜らないための最大階層数（ストッパー機能）
-max_depth = 5
+# [Depth Control] Maximum depth limit optimized for a general directory structure
+max_depth_limit = 6
 
-# 【完全非表示】 存在すらツリーから消し去りたいフォルダ・ファイル
-# 「念のためバックアップ」を緊急避難させました
+# Default depth to display when no depth option is specified
+default_depth = 3
+
+# [Complete Hide] Directories and files to completely remove from the tree
+# Filters out standard version control folders, editor configurations, and basic caches
 hide_dirs = [
-    "__pycache__", 
-    "退避", 
-    "念のためバックアップ", 
-    ".git", 
-    ".vscode", 
-    ".idea", 
-    ".pytest_cache", 
-    "build", 
-    "dist"
+    ".git",
+    ".vscode",
+    ".idea",
+    "__pycache__",
+    "node_modules"
 ]
 
-# 【下層隠し】 フォルダ名は出すけど、中身は非表示にしたいフォルダ
+# [Collapse Content] Display the directory name but hide its internal contents
 exclude_dirs = [
-    "venv", 
-    ".venv", 
-    "node_modules", 
-    "docs", 
-    "assets"
+    "images",
+    "img",
+    "assets",
+    "vendor",
+    "backup"
 ]
 
-# 【拡張子除外】 画面を汚す不要なファイルや、つい作ってしまう「.old」
+# [Extension Exclusion] Exclude specific file types to improve visual clarity
 exclude_exts = [
-    ".pyc", 
-    ".pyd", 
-    ".pyo", 
-    ".DS_Store", 
-    "Thumbs.db", 
+    ".DS_Store",
+    "Thumbs.db",
     ".log",
-    ".old"
+    ".old",
+    "*.bak",
+    "*.tmp"
 ]
 
 [comments]
-# --- このツール関連 ---
-"vibe_tree.py" = "<- ツリー構造生成スクリプト"
-"vibe_tree_config.toml" = "<- この設定ファイル"
-"README.md" = "<- あなたがいま読んでいるドキュメント"
+# --- Tool & Common Documents ---
+"README.md" = "Project documentation and overview"
+".gitignore" = "Git ignore configuration"
+"LICENSE" = "Project license agreement"
 
-# --- Python・環境構築関連 ---
-"main.py" = "<- メインの実行ファイル"
-"requirements.txt" = "<- 依存ライブラリ（pip）一覧"
-"venv" = "<- Python仮想環境（作成済み）"
-".venv" = "<- Python仮想環境（作成済み）"
+# --- General Web & Document Structures ---
+"index.html" = "Main HTML document (Entry point)"
+"style.css" = "Main stylesheet"
+"script.js" = "Main JavaScript file"
+"docs" = "Directory for internal documentation"
+"config.json" = "General project configuration file"
 
-# --- その他共通・定番ファイル ---
-".gitignore" = "<- Git管理から除外するファイルの設定"
-"LICENSE" = "<- ライセンス（利用規約）表記ファイル"
+# --- Personal ---
+"todo.txt" = "Pending tasks and to-do list"
 
-# --- 自分用 ---
-"よく使うプロンプト.txt" = "<- AIへの指示出し用"
-"memo.txt" = "<- 殴り書き用の一時ファイル"
-"todo.txt" = "<- 直近でやりたいことメモ"
